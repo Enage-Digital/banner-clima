@@ -7,6 +7,21 @@ const DAY_COLOR = "#ff0080";
 
 
 //obtener datos de la geolocalizacion
+async function getWeather() {
+    let url = `https://frontbanner.b-cdn.net/regionesConClima.json`;
+    //send headers json     
+    let data = await fetch(url, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+        }
+    });
+    let json = await data.json();
+    return json;
+}
+
 async function getLocation() {
     return new Promise((resolve, reject) => {
         if (navigator.geolocation) {
@@ -14,7 +29,6 @@ async function getLocation() {
                 (position) => {
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
-                    // console.log(latitude, longitude);
                     resolve({ latitude, longitude });
                 },
                 (error) => {
@@ -27,36 +41,14 @@ async function getLocation() {
     });
 }
 
-//obtener datos del clima
-async function getWeather(city) {
-    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${API_KEY}&units=metric`;
-    let data = await fetch(url);
-    let json = await data.json();
-    return json;
-}
 
-// obtener ciudad
-async function obtenerCiudad(lat, lng) {
-    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&limit=1&language=es`;
-
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (data.address && data.address.city) {
-            // console.log(`Ciudad: ${data.address.city}`);
-            return data.address.city;
-        } else {
-            throw new Error("No se encontró la ciudad.");
-        }
-    } catch (error) {
-        console.error("Error al obtener la ciudad:", error);
-        throw error;
-    }
-}
 
 //crear html personalizado
-function createCustomHtml(txtCity = "Santiago", txtTemp = "23°", txtIcon = "10d") {
+function createCustomHtml(weather, location = {latitude: 33, longitude: -70}) {
+
+    console.log(weather);
+    console.log(location);
+
 
     const canvas = document.getElementById("canvas");
     const clickTag = document.getElementById("clickTag");
@@ -143,10 +135,8 @@ async function mostrarClima() {
 
     try {   
         const location = await getLocation();
-        const city = await obtenerCiudad(location.latitude, location.longitude); 
-        const weather = await getWeather(city);
-        // console.log(weather);
-        createCustomHtml(city, weather.main.temp, weather.weather[0].icon, weather.weather[0].description);   
+        const weather = await getWeather();
+        createCustomHtml(weather, location);   
     } catch (error) {
         console.error("Error:", error.message);
     }

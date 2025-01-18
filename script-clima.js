@@ -8,15 +8,13 @@ const DAY_COLOR = "#ff0080";
 
 //obtener datos de la geolocalizacion
 async function getWeather() {
-    let url = `https://frontbanner.b-cdn.net/regionesConClima.json`;
+    let url = `https://b.frontbanner.online/regionesConClima.json`;
+    //get headers
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
     //send headers json     
     let data = await fetch(url, {
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-        }
+        headers: headers
     });
     let json = await data.json();
     return json;

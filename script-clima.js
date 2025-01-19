@@ -1,10 +1,11 @@
 //configuracion
-const API_KEY = "9ec9e53fdacca4be970248c7e3c45b91";
 const CITY = "Santiago";
-const TEMP_COLOR = "#ff0080";
-const CITY_COLOR = "#ff0080";
-const DAY_COLOR = "#ff0080";
+const TEMP_COLOR = "#000000";
+const CITY_COLOR = "#ff0080";//color 29grados
+const DAY_COLOR = "#000000";
 
+let jsonWeather = [];
+let userLocation = {latitude: 33, longitude: -70};
 
 //obtener datos de la geolocalizacion
 async function getWeather() {
@@ -17,6 +18,7 @@ async function getWeather() {
         headers: headers
     });
     let json = await data.json();
+    jsonWeather = json;
     return json;
 }
 
@@ -27,6 +29,7 @@ async function getLocation() {
                 (position) => {
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
+                    userLocation = {latitude, longitude};
                     resolve({ latitude, longitude });
                 },
                 (error) => {
@@ -42,10 +45,44 @@ async function getLocation() {
 
 
 //crear html personalizado
-function createCustomHtml(weather, location = {latitude: 33, longitude: -70}) {
+function createCustomHtml(weather, location = userLocation) {
 
-    console.log(weather);
-    console.log(location);
+    // console.log(weather);
+    // console.log(location);
+
+    //find closest weather by calculating distance to each location
+    // Función para calcular la distancia entre dos puntos geográficos usando la fórmula del haversine
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Radio de la Tierra en kilómetros
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c; // Distancia en kilómetros
+    }
+    
+    // Función para encontrar la coordenada más cercana
+    function findNearestCoordinate(myLat, myLon, coordinates) {
+        let nearestCoordinate = null;
+        let minDistance = Infinity;
+    
+        for (const coord of coordinates) {
+        const distance = calculateDistance(myLat, myLon, coord.lat, coord.lon);
+        if (distance < minDistance) {
+            minDistance = distance;
+            nearestCoordinate = coord;
+        }
+        }
+    
+        return nearestCoordinate;
+    }
+  
+    const nearest = findNearestCoordinate(location.latitude, location.longitude, weather);
+
+    // console.log(nearest);
 
 
     const canvas = document.getElementById("canvas");
@@ -67,7 +104,7 @@ function createCustomHtml(weather, location = {latitude: 33, longitude: -70}) {
     temp.style.alignItems = "center";
     temp.style.zIndex = "1";
     temp.style.color = TEMP_COLOR;
-    temp.innerHTML = `<span>${txtCity}</span>`;
+    temp.innerHTML = `<span>${nearest.comuna}</span>`;
     canvas.appendChild(temp);
 
     //crear div temperatura
@@ -85,7 +122,7 @@ function createCustomHtml(weather, location = {latitude: 33, longitude: -70}) {
     city.style.justifyContent = "center";
     city.style.alignItems = "center";
     city.style.zIndex = "1";
-    city.innerHTML = `<span>${Math.round(txtTemp)}°</span>`;
+    city.innerHTML = `<span>${Math.round(nearest.clima.temperatura)}°</span>`;
     city.style.color = CITY_COLOR;
     canvas.appendChild(city);
 
@@ -101,7 +138,7 @@ function createCustomHtml(weather, location = {latitude: 33, longitude: -70}) {
     icon.style.top = "25px";
     icon.style.backgroundColor = "rgb(246 247 245)";
     icon.style.zIndex = "1";
-    icon.innerHTML = `<img src="icons/${txtIcon}_t.png" alt="icon" style="width: 100%; height: 100%;" >`;
+    icon.innerHTML = `<img src="icons/${nearest.clima.icono}_t.png" alt="icon" style="width: 100%; height: 100%;" >`;
     canvas.appendChild(icon);
 
     //crear div dia
@@ -109,14 +146,14 @@ function createCustomHtml(weather, location = {latitude: 33, longitude: -70}) {
     const hoy = new Date();
     const dia = hoy.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
 
-    todayDay.style.width = "100px";
+    todayDay.style.width = "130px";
     todayDay.style.height = "11px";
     todayDay.style.position = "absolute";
     todayDay.style.fontFamily = "Arial, sans-serif";
     todayDay.style.fontSize = "10px";
     todayDay.style.fontWeight = "bold";
     todayDay.style.top = "84px";
-    todayDay.style.left = "151px";
+    todayDay.style.left = "135px";
     todayDay.style.backgroundColor = "rgb(246 247 245)";
     todayDay.style.display = "flex";
     todayDay.style.justifyContent = "center";

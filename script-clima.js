@@ -1,12 +1,3 @@
-//configuracion
-const CITY = "Santiago";
-const TEMP_COLOR = "#000000";
-const CITY_COLOR = "#ff0080";//color 29grados
-const DAY_COLOR = "#000000";
-
-let jsonWeather = [];
-let userLocation = {latitude: 33, longitude: -70};
-
 //obtener datos de la geolocalizacion
 async function getWeather() {
     let url = `https://b.frontbanner.online/regionesConClima.json`;

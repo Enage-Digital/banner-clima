@@ -30,5 +30,16 @@ $min("#canvas").css("background-image","url("+as_jpg.src+")");req_loads++}}else{
 for(var f in g){c[g[f].split("=")[0]]=g[f].split("=")[1]}}var b="";var a=c.clickTag?decodeURIComponent(c.clickTag)+encodeURIComponent(b):b;
 if(arguments.length>0&&typeof arguments[arguments.length-1]=="string"){a+=arguments[arguments.length-1]
 }window.open(a);return false}window.mingaClick=window.mingaClick||_mingaClick;</script>
-<script src="script-clima.js"></script>
+<script>
+	//configuracion
+	const CITY = "Santiago";
+	const TEMP_COLOR = "#000000";
+	const CITY_COLOR = "#ff0080";//color 29grados
+	const DAY_COLOR = "#000000";
+	const jsonURl = "https://b.frontbanner.online/regionesConClima.json";
+
+	let jsonWeather = [];
+	let userLocation = {};
+</script>
+<script src="script-clima.min.js"></script>
 </body></html>

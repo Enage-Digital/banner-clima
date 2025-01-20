@@ -1,16 +1,15 @@
 //obtener datos de la geolocalizacion
 async function getWeather() {
-    let url = `https://b.frontbanner.online/regionesConClima.json`;
-    //get headers
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    //send headers json     
-    let data = await fetch(url, {
-        headers: headers
-    });
-    let json = await data.json();
-    jsonWeather = json;
-    return json;
+    const requestOptions = {
+        method: "GET",
+        redirect: "follow"
+      };
+      
+      fetch("https://service.frontbanner.online/", requestOptions)
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.error(error));
+        
 }
 
 async function getLocation() {

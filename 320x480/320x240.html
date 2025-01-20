@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta name="viewport"
+		content="user-scalable=no, width=device-width,initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta name="ad.size" content="width=320,height=480">
+	<meta name="generator" content="Minga AdsHouse Studio v.1.2">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<style>
+		html,
+		body {
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			height: 100%
+		}
+
+		body {
+			overflow: hidden
+		}
+	</style>
+</head>
+
+<body>
+	<style>
+		#canvas {
+			display: block;
+			background: #fff url("320x480.jpg") no-repeat;
+			position: relative;
+			overflow: hidden;
+			width: 320px;
+			height: 480px
+		}
+
+		#loader,
+		#clickTag {
+			background: transparent;
+			position: absolute;
+			display: block;
+			top: 200px;
+			left: 120px;
+			font-family: arial, verdana;
+			width: 181px;
+			height: 21px;
+			color: #fff
+		}
+
+		#clickTag {
+			top: 0;
+			left: 0;
+			width: 320px;
+			height: 480px;
+			cursor: pointer;
+			border: 0 solid transparent
+		}
+	</style>
+	<div id="canvas" width="320" height="480"></div>
+	<div id="clickTag"></div>
+	<script type="text/javascript" id="minad_ct">
+	var pos=0;var loads=0;var req_loads=0;var wr=document.getElementById("canvas");document.getElementById("clickTag").onclick=function(){window.mingaClick()
+	};
+	function _mingaClick(){var c={};if(location.search){var g=location.search.substr(1).split("&");
+		for(var f in g){c[g[f].split("=")[0]]=g[f].split("=")[1]}}var b="";var a=c.clickTag?decodeURIComponent(c.clickTag)+encodeURIComponent(b):b;
+		if(arguments.length>0&&typeof arguments[arguments.length-1]=="string"){a+=arguments[arguments.length-1]
+		}window.open(a);return false}window.mingaClick=window.mingaClick||_mingaClick;</script>
+	<script>
+		//configuracion
+		const CITY = "Santiago";
+		const TEMP_COLOR = "#000000";
+		const CITY_COLOR = "#ff0080";//color 29grados
+		const DAY_COLOR = "#000000";
+		const jsonURl = "//service.frontbanner.online";
+
+		let jsonWeather = [];
+		let userLocation = {};
+	</script>
+	<script src="script-clima.min.js"></script>
+</body>
+
+</html>
